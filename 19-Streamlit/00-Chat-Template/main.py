@@ -2,7 +2,7 @@ import streamlit as st
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import ChatMessage
 from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import load_prompt
 
 
@@ -24,7 +24,7 @@ def add_history(role, content):
 
 # 체인을 생성합니다.
 def create_chain(prompt, model):
-    chain = prompt | ChatOpenAI(model_name=model) | StrOutputParser()
+    chain = prompt | ChatGoogleGenerativeAI(model=model) | StrOutputParser()
     return chain
 
 

@@ -1,12 +1,12 @@
 from pyexpat import model
 import streamlit as st
 from langchain_core.messages.chat import ChatMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_teddynote.prompts import load_prompt
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_ollama import ChatOllama
 from langchain_teddynote import logging
 from dotenv import load_dotenv
@@ -81,20 +81,20 @@ def format_doc(document_list):
 
 
 # 체인 생성
-def create_chain(retriever, model_name="xionic"):
+def create_chain(retriever, model="xionic"):
     # 단계 6: 프롬프트 생성(Create Prompt)
     # 프롬프트를 생성합니다.
-    if model_name == "xionic":
+    if model == "xionic":
         # 단계 6: 프롬프트 생성(Create Prompt)
         prompt = load_prompt("prompts/pdf-rag-xionic.yaml", encoding="utf-8")
 
         # 단계 7: 언어모델(LLM) 생성
-        llm = ChatOpenAI(
-            model_name="xionic-1-72b-20240610",
+        llm = ChatGoogleGenerativeAI(
+            model="xionic-1-72b-20240610",
             base_url="https://sionic.chat/v1/",
             api_key="934c4bbc-c384-4bea-af82-1450d7f8128d",
         )
-    elif model_name == "ollama":
+    elif model == "ollama":
         # 단계 6: 프롬프트 생성(Create Prompt)
         prompt = load_prompt("prompts/pdf-rag-ollama.yaml", encoding="utf-8")
 
@@ -116,7 +116,7 @@ def create_chain(retriever, model_name="xionic"):
 if uploaded_file:
     # 파일 업로드 후 retriever 생성 (작업시간이 오래 걸릴 예정...)
     retriever = embed_file(uploaded_file)
-    chain = create_chain(retriever, model_name=selected_model)
+    chain = create_chain(retriever, model=selected_model)
     st.session_state["chain"] = chain
 
 # 초기화 버튼이 눌리면...

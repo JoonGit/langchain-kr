@@ -1,6 +1,6 @@
 import streamlit as st
 from langchain_core.messages.chat import ChatMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_teddynote import logging
 from langchain_teddynote.models import MultiModal
 
@@ -45,7 +45,9 @@ with st.sidebar:
     uploaded_file = st.file_uploader("이미지 업로드", type=["jpg", "jpeg", "png"])
 
     # 모델 선택 메뉴
-    selected_model = st.selectbox("LLM 선택", ["gpt-4.1-mini", "gpt-4.1-nano"], index=0)
+    selected_model = st.selectbox(
+        "LLM 선택", ["gpt-4.1-mini", "gemini-1.5-flash"], index=0
+    )
 
     # 시스템 프롬프트 추가
     system_prompt = st.text_area(
@@ -80,13 +82,11 @@ def process_imagefile(file):
 
 
 # 체인 생성
-def generate_answer(
-    image_filepath, system_prompt, user_prompt, model_name="gpt-4.1-mini"
-):
+def generate_answer(image_filepath, system_prompt, user_prompt, model="gpt-4.1-mini"):
     # 객체 생성
-    llm = ChatOpenAI(
+    llm = ChatGoogleGenerativeAI(
         temperature=0,
-        model_name=model_name,  # 모델명
+        model=model,  # 모델명
     )
 
     # 멀티모달 객체 생성

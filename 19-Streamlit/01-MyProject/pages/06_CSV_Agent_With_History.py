@@ -216,7 +216,7 @@ def create_agent(
 
     return DataAnalysisAgent(
         dataframe,
-        model_name=selected_model,
+        model=selected_model,
         prefix_prompt=prefix_prompt,
         postfix_prompt=postfix_prompt,
         column_guideline=user_column_guideline,
@@ -251,12 +251,18 @@ def ask(query):
                 if "output" in step:
                     ai_answer += step["output"]
                 # DataFrame이 출력되었는지 확인
-                if st.session_state["messages"] and st.session_state["messages"][-1][0] == MessageRole.ASSISTANT:
+                if (
+                    st.session_state["messages"]
+                    and st.session_state["messages"][-1][0] == MessageRole.ASSISTANT
+                ):
                     for content in st.session_state["messages"][-1][1]:
-                        if isinstance(content, list) and content[0] == MessageType.DATAFRAME:
+                        if (
+                            isinstance(content, list)
+                            and content[0] == MessageType.DATAFRAME
+                        ):
                             has_dataframe = True
                             break
-            
+
             # DataFrame이 출력되지 않은 경우에만 텍스트 답변 출력
             if not has_dataframe and ai_answer:
                 st.write(ai_answer)

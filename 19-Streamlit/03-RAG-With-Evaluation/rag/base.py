@@ -1,6 +1,6 @@
 from langchain_core.output_parsers import StrOutputParser
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import OpenAIEmbeddings, ChatGoogleGenerativeAI
 
 from abc import ABC, abstractmethod
 from operator import itemgetter
@@ -43,7 +43,7 @@ class RetrievalChain(ABC):
         return dense_retriever
 
     def create_model(self):
-        return ChatOpenAI(model_name="gpt-4.1-mini", temperature=0)
+        return ChatGoogleGenerativeAI(model="gpt-4.1-mini", temperature=0)
 
     def create_prompt(self):
         return hub.pull("teddynote/rag-prompt")

@@ -6,7 +6,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_core.output_parsers import PydanticOutputParser
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.utilities import SerpAPIWrapper
 from langchain_teddynote.prompts import load_prompt
 
@@ -79,7 +79,7 @@ def create_email_parsing_chain():
     prompt = prompt.partial(format=output_parser.get_format_instructions())
 
     # 체인 생성
-    chain = prompt | ChatOpenAI(model="gpt-4.1") | output_parser
+    chain = prompt | ChatGoogleGenerativeAI(model="gpt-4.1") | output_parser
 
     return chain
 
@@ -91,7 +91,7 @@ def create_report_chain():
     output_parser = StrOutputParser()
 
     # 체인 생성
-    chain = prompt | ChatOpenAI(model="gpt-4.1") | output_parser
+    chain = prompt | ChatGoogleGenerativeAI(model="gpt-4.1") | output_parser
 
     return chain
 

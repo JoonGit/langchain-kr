@@ -5,11 +5,11 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from langchain_core.prompts import ChatPromptTemplate, load_prompt
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import create_tool_calling_agent, AgentExecutor
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,13 +19,13 @@ class DataAnalysisAgent:
     def __init__(
         self,
         dataframe: pd.DataFrame,
-        model_name: str = "gpt-4o",
+        model: str = "gpt-4o",
         prefix_prompt: Optional[str] = None,
         postfix_prompt: Optional[str] = None,
         column_guideline: Optional[str] = None,
     ):
         self.df = dataframe
-        self.model_name = model_name
+        self.model = model
         self.prefix_prompt = prefix_prompt
         self.postfix_prompt = postfix_prompt
         if column_guideline is not None and column_guideline.strip() != "":
@@ -82,7 +82,7 @@ class DataAnalysisAgent:
             ]
         )
 
-        llm = ChatOpenAI(model=self.model_name, temperature=0)
+        llm = ChatGoogleGenerativeAI(model=self.model, temperature=0)
         agent = create_tool_calling_agent(llm, self.tools, prompt)
         self.agent_executor = AgentExecutor(
             agent=agent,

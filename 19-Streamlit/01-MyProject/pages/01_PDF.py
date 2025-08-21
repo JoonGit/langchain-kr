@@ -1,6 +1,6 @@
 import streamlit as st
 from langchain_core.messages.chat import ChatMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_teddynote.prompts import load_prompt
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -8,7 +8,7 @@ from langchain_community.document_loaders import PDFPlumberLoader
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI, OpenAIEmbeddings
 from langchain_teddynote import logging
 from dotenv import load_dotenv
 import os
@@ -97,14 +97,14 @@ def embed_file(file):
 
 
 # 체인 생성
-def create_chain(retriever, model_name="gpt-4o"):
+def create_chain(retriever, model="gpt-4o"):
     # 단계 6: 프롬프트 생성(Create Prompt)
     # 프롬프트를 생성합니다.
     prompt = load_prompt("prompts/pdf-rag.yaml", encoding="utf-8")
 
     # 단계 7: 언어모델(LLM) 생성
     # 모델(LLM) 을 생성합니다.
-    llm = ChatOpenAI(model_name=model_name, temperature=0)
+    llm = ChatGoogleGenerativeAI(model=model, temperature=0)
 
     # 단계 8: 체인(Chain) 생성
     chain = (
@@ -120,7 +120,7 @@ def create_chain(retriever, model_name="gpt-4o"):
 if uploaded_file:
     # 파일 업로드 후 retriever 생성 (작업시간이 오래 걸릴 예정...)
     retriever = embed_file(uploaded_file)
-    chain = create_chain(retriever, model_name=selected_model)
+    chain = create_chain(retriever, model=selected_model)
     st.session_state["chain"] = chain
 
 # 초기화 버튼이 눌리면...

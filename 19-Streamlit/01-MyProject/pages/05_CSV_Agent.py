@@ -1,7 +1,7 @@
 from typing import List, Union
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain_experimental.tools import PythonAstREPLTool
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_teddynote import logging
 from langchain_teddynote.messages import AgentStreamParser, AgentCallbacks
 from dotenv import load_dotenv
@@ -89,7 +89,7 @@ with st.sidebar:
         "CSV 파일을 업로드 해주세요.", type=["csv"], accept_multiple_files=True
     )  # CSV 파일 업로드 기능
     selected_model = st.selectbox(
-        "OpenAI 모델을 선택해주세요.", ["gpt-4.1-mini", "gpt-4.1-nano"], index=0
+        "OpenAI 모델을 선택해주세요.", ["gpt-4.1-mini", "gemini-1.5-flash"], index=0
     )  # OpenAI 모델 선택 옵션
     apply_btn = st.button("데이터 분석 시작")  # 데이터 분석을 시작하는 버튼
 
@@ -177,7 +177,7 @@ def create_agent(dataframe, selected_model="gpt-4.1-mini"):
         Agent: 생성된 데이터프레임 에이전트
     """
     return create_pandas_dataframe_agent(
-        ChatOpenAI(model=selected_model, temperature=0),
+        ChatGoogleGenerativeAI(model=selected_model, temperature=0),
         dataframe,
         verbose=False,
         agent_type="tool-calling",

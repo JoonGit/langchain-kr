@@ -2,13 +2,13 @@ from urllib import response
 from requests import session
 import streamlit as st
 from langchain_core.messages.chat import ChatMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_teddynote import logging
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.output_parsers import StrOutputParser
 
 from dotenv import load_dotenv
@@ -49,7 +49,9 @@ with st.sidebar:
     clear_btn = st.button("대화 초기화")
 
     # 모델 선택 메뉴
-    selected_model = st.selectbox("LLM 선택", ["gpt-4.1-mini", "gpt-4.1-nano"], index=0)
+    selected_model = st.selectbox(
+        "LLM 선택", ["gpt-4.1-mini", "gemini-1.5-flash"], index=0
+    )
 
     # 세션 ID 를 지정하는 메뉴
     session_id = st.text_input("세션 ID를 입력하세요.", "abc123")
@@ -75,7 +77,7 @@ def get_session_history(session_ids):
 
 
 # 체인 생성
-def create_chain(model_name="gpt-4.1-mini"):
+def create_chain(model="gpt-4.1-mini"):
 
     # 프롬프트 정의
     prompt = ChatPromptTemplate.from_messages(
@@ -91,7 +93,7 @@ def create_chain(model_name="gpt-4.1-mini"):
     )
 
     # llm 생성
-    llm = ChatOpenAI(model_name="gpt-4.1-mini")
+    llm = ChatGoogleGenerativeAI(model="gpt-4.1-mini")
 
     # 일반 Chain 생성
     chain = prompt | llm | StrOutputParser()
@@ -119,7 +121,7 @@ user_input = st.chat_input("궁금한 내용을 물어보세요!")
 warning_msg = st.empty()
 
 if "chain" not in st.session_state:
-    st.session_state["chain"] = create_chain(model_name=selected_model)
+    st.session_state["chain"] = create_chain(model=selected_model)
 
 
 # 만약에 사용자 입력이 들어오면...
