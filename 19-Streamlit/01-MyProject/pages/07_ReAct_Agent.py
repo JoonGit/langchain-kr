@@ -34,7 +34,7 @@ with st.sidebar:
 
     # 모델 선택 메뉴
     selected_model = st.selectbox(
-        "LLM 선택", ["gpt-4.1-mini", "gemini-1.5-flash"], index=0
+        "LLM 선택", ["gpt-4.1-mini", "gemini-1.5-pro"], index=0
     )
 
     # 세션 ID 를 지정하는 메뉴

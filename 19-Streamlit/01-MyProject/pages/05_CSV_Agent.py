@@ -89,7 +89,7 @@ with st.sidebar:
         "CSV 파일을 업로드 해주세요.", type=["csv"], accept_multiple_files=True
     )  # CSV 파일 업로드 기능
     selected_model = st.selectbox(
-        "OpenAI 모델을 선택해주세요.", ["gpt-4.1-mini", "gemini-1.5-flash"], index=0
+        "OpenAI 모델을 선택해주세요.", ["gpt-4.1-mini", "gemini-1.5-pro"], index=0
     )  # OpenAI 모델 선택 옵션
     apply_btn = st.button("데이터 분석 시작")  # 데이터 분석을 시작하는 버튼
 
